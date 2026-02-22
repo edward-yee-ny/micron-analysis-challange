@@ -163,7 +163,7 @@ for qi, q in enumerate(quarters):
     all_tool_plans.append({'q':q,'tools':tools})
 
 # Write flow CSV
-with open('/home/claude/flow_ok.csv','w',newline='') as f:
+with open('/home/flow_ok.csv','w',newline='') as f:
     w = csv.writer(f)
     w.writerow(['Quarter','Node','Step','Fab','Loading (to fill)'])
     for r in all_flows:
@@ -176,7 +176,7 @@ with open('/home/claude/flow_ok.csv','w',newline='') as f:
                 w.writerow([r['q'],nn,s,3,d['Fab3']])
 
 # Write tools CSV - EXACT tools needed per quarter
-with open('/home/claude/tools_ok.csv','w',newline='') as f:
+with open('/home/tools_ok.csv','w',newline='') as f:
     w = csv.writer(f)
     w.writerow(['Quarter','WS Name','Fab 1 - WS Count','Fab 2 - WS Count','Fab 3 - WS Count'])
     for r in all_tool_plans:
