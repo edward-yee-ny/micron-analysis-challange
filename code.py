@@ -185,26 +185,10 @@ with open('/home/tools_ok.csv','w',newline='') as f:
                         r['tools']['Fab1'].get(ws,0),
                         r['tools']['Fab2'].get(ws,0),
                         r['tools']['Fab3'].get(ws,0)])
-
-print("\n\nCSVs written: flow_ok.csv and tools_ok.csv")
-
-python3 -c "
-import math
-# Q2'27-Q4'27 still infeasible. Let me compute exactly why.
-# Q2'27: n3=11000. Node3 C-steps need certain space, Node1+Node2 need certain space.
-# With C-steps split across Fab1+Fab2 (not Fab3), what's the minimum space?
-
 MINS_PW = 7*24*60
 UTIL = {'A':0.78,'B':0.76,'C':0.80,'D':0.80,'E':0.76,'F':0.80}
 SPACE = {'A':6.78,'B':3.96,'C':5.82,'D':5.61,'E':4.65,'F':3.68}
 
-# Minimum machines needed in total for all nodes combined in Q2'27:
-# Node1=5000, Node2=6500, Node3=11000
-# Node1 uses: A,D,F
-# Node2 uses: B,E,F
-# Node3 uses: C,D,E,F (non-C) and C (C-steps)
-
-# If we put everything in one fab with infinite space, what's the total?
 nodes1_rpt = {'D':14+27+17+14,'F':25+27+12+18,'A':20+18+16}  # sum RPTs per WS
 nodes2_rpt = {'B':20+25+15+22,'E':10+7+9+20+12+15+13,'F':19+16+17+21}
 nodes3c_rpt = {'C':21+24+19+12+25}  # C-step RPTs
@@ -233,16 +217,7 @@ print(f'Available space across 3 fabs: 1500+1300+700=3500m2')
 print(f'Total needed: {total_space:.0f}m2')
 print(f'Fits in total space: {total_space <= 3500}')
 
-python3 -c "
-import math
-# Even across ALL 3 fabs total (3500m2), the tools needed for Q2'27 = 3606m2.
-# This is 106m2 over. This is a FUNDAMENTAL infeasibility in the problem itself.
-# 
-# The ONLY escape: use TOR tools which have SMALLER footprint per tool.
-# TOR tools are more efficient per wafer (lower RPT) so fewer tools needed.
-# AND some TOR tools are smaller (e.g., F+=3.57 vs F=3.68, D+=5.74 vs D=5.61)
-# 
-# Let's check with ALL TOR tools:
+
 MINS_PW = 7*24*60
 UTIL = {'A+':0.84,'B+':0.81,'C+':0.86,'D+':0.88,'E+':0.84,'F+':0.90}
 SPACE = {'A+':6.93,'B+':3.72,'C+':5.75,'D+':5.74,'E+':4.80,'F+':3.57}
@@ -272,7 +247,7 @@ for ws,t in sorted(total_tools.items()): print(f'  {ws}: {t} tools = {t*SPACE[ws
 print(f'Total: {total_space:.0f}m2 / 3500m2 available -> fits: {total_space <= 3500}')
 print()
 # Check for Q3'27 and Q4'27
-for n1,n2,n3,q in [(4000,7000,13000,\"Q3'27\"),(2000,7500,16000,\"Q4'27\")]:
+for n1,n2,n3,q in [(4000,7000,13000,"Q3'27"),(2000,7500,16000,"Q4'27")]:
     total_mins2 = {}
     for ws,rpt in nodes1_rpt.items(): total_mins2[ws]=total_mins2.get(ws,0)+n1*rpt
     for ws,rpt in nodes2_rpt.items(): total_mins2[ws]=total_mins2.get(ws,0)+n2*rpt
